@@ -1,0 +1,33 @@
+===== 1. BUILDER =====
+Minimal : StudentAccount{id=20240001, name=Amine Bouzid, email=amine@univ.dz, phone=null, level=L1, major=null, scholarship=false, courses=[]}
+Full    : StudentAccount{id=20240002, name=Sara Khelifi, email=sara@univ.dz, phone=0555123456, level=M1, major=Software Engineering, scholarship=true, courses=[Design Patterns, Distributed Systems]}
+Rejected (missing id): 'id' is mandatory and cannot be empty
+Rejected (email without @): 'email' must contain '@' : bad.mail.univ.dz
+Rejected (unknown level): 'level' must be one of [L1, L2, L3, M1, M2] : L9
+
+===== 2. SINGLETON =====
+Repository: r1 == r2 ? true
+AuditLogger: l1 == l2 ? true
+Accounts seen through r2 (saved via r1): 2
+Duplicate rejected: An account with id '20240001' already exists in the repository
+
+===== 3. PROTOTYPE =====
+Template: StudentAccount{id=TEMPLATE, name=Template, email=template@univ.dz, phone=null, level=L2, major=Computer Science, scholarship=false, courses=[Algorithms, Databases, Java OOP]}
+Cloned : StudentAccount{id=20240101, name=Yacine Mansouri, email=yacine@univ.dz, phone=null, level=L2, major=Computer Science, scholarship=false, courses=[Algorithms, Databases, Java OOP]}
+Cloned : StudentAccount{id=20240102, name=Lina Hamdi, email=lina@univ.dz, phone=null, level=L2, major=Computer Science, scholarship=false, courses=[Algorithms, Databases, Java OOP]}
+Cloned : StudentAccount{id=20240103, name=Karim Belaid, email=karim@univ.dz, phone=null, level=L2, major=Computer Science, scholarship=false, courses=[Algorithms, Databases, Java OOP]}
+After adding a course to 20240101 only:
+  20240101 courses = [Algorithms, Databases, Java OOP, Machine Learning]
+  20240102 courses = [Algorithms, Databases, Java OOP]
+  template courses = [Algorithms, Databases, Java OOP]
+clone != template ? true
+
+===== FINAL STATE =====
+Accounts in repository: 5
+---- AUDIT LOG (6 entries) ----
+[20:01:37] CREATED account 20240001 (Amine Bouzid)
+[20:01:37] CREATED account 20240002 (Sara Khelifi)
+[20:01:37] REJECTED duplicate id 20240001
+[20:01:37] CREATED account 20240101 (Yacine Mansouri)
+[20:01:37] CREATED account 20240102 (Lina Hamdi)
+[20:01:37] CREATED account 20240103 (Karim Belaid)

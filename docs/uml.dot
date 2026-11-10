@@ -1,0 +1,28 @@
+digraph UML {
+  rankdir=BT; nodesep=0.5; ranksep=0.9;
+  node [shape=record, fontname="DejaVu Sans", fontsize=10, style=filled, fillcolor="#FFFFFF"];
+  edge [fontname="DejaVu Sans", fontsize=9];
+
+  Prototype [fillcolor="#E8F0FE", label="{«interface»\nPrototype\<T\>|+ copy() : T}"];
+
+  Student [fillcolor="#FFF4E0", label="{StudentAccount\n«Product / Concrete Prototype»|- id : String\l- fullName : String\l- email : String\l- phone : String\l- level : String\l- major : String\l- scholarship : boolean\l- courses : List\<String\>\l|- StudentAccount(b : Builder)\l+ copy() : StudentAccount\l+ copyFor(id, name, email) : StudentAccount\l+ addCourse(c : String)\l+ getters...\l}"];
+
+  Builder [fillcolor="#E6F4EA", label="{StudentAccount.Builder\n«Concrete Builder»|- id, fullName, email  (mandatory)\l- phone, level, major, scholarship,\l   courses  (optional + defaults)\l|+ Builder(id, fullName, email)\l+ phone(p) : Builder\l+ level(l) : Builder\l+ major(m) : Builder\l+ scholarship(s) : Builder\l+ addCourse(c) : Builder\l+ build() : StudentAccount\l}"];
+
+  Repo [fillcolor="#FCE8E6", label="{AccountRepository\n«Singleton»|- accounts : Map\<String, StudentAccount\>\l- AccountRepository()\l|+ getInstance() : AccountRepository \{static\}\l+ save(a : StudentAccount)\l+ findById(id) : Optional\l+ findAll() : List\l+ count() : int\l}"];
+
+  Log [fillcolor="#FCE8E6", label="{AuditLogger\n«Singleton»|- entries : List\<String\>\l- AuditLogger()\l|+ getInstance() : AuditLogger \{static\}\l+ log(operation : String)\l+ print()\l}"];
+
+  Dup [label="{DuplicateAccountException|}"];
+  Main [fillcolor="#F1F3F4", label="{Main\n«Client»|+ main(args)\l}"];
+
+  Student -> Prototype [arrowhead=onormal, style=dashed, label="implements"];
+  Builder -> Student [arrowhead=open, style=dashed, label="«creates»"];
+  Builder -> Student [arrowhead=diamond, arrowtail=none, label="nested in", constraint=false, style=dotted];
+  Repo -> Student [arrowhead=odiamond, label="stores 0..*"];
+  Repo -> Log [arrowhead=open, style=dashed, label="uses"];
+  Repo -> Dup [arrowhead=open, style=dashed, label="throws"];
+  Main -> Builder [arrowhead=open, style=dashed, label="uses"];
+  Main -> Repo [arrowhead=open, style=dashed];
+  Main -> Student [arrowhead=open, style=dashed, label="copyFor()"];
+}
